@@ -43,7 +43,7 @@ orders = [{
 }]
 
 ## Sub-menu specific functions
-# ordersmenu function welcome, can make into bare skeleton so can re-use and polymorph for other menus
+# ordersmenu function welcome (to be deprecated), refactor later
 def ordermenu(): 
     ordersopts = ["Return to main menu", "Show orders dictionary list", "Add an order",
                 "Update existing order status", "Update an existing order", "Remove an order",
@@ -67,11 +67,15 @@ def showOrders():
 def showCouriers():
     for i, item in enumerate(couriers):
         print(f"{i}: {item}")
-    choice = int(input("Enter index of courier to assign to this order: "))
+    
+    try:
+        choice = input("Enter index of courier to assign to this order: ")
+    except ValueError:
+        choice = None
+        
     return choice
 
-# makes new order dictionary, append dict to orders list
-#TODO modify neworder function to ignore blank field entry
+# makes new order dictionary, returns new dictionary
 def newOrder():
     clearConsole()
     # make new empty dict, add property input line by line, clearConsole after each line
@@ -82,9 +86,9 @@ def newOrder():
         "courier": showCouriers(),
         "status": "PREPARING"
     }
-    orders.append(newDict)
+    
     clearConsole()
-    print(f"Added \"{orders[-1]}\" to orders list!")
+    return newDict
 
 
 ## Init app!
@@ -265,7 +269,10 @@ while True:
 
         # orderopt2: add to orders list
         elif ordermenu == 2:
-            newOrder() # call func to make new order
+            insertDict = newOrder() # call func to make new order
+            
+            orders.append(insertDict)
+            print(f"Added \"{insertDict}\" to orders list!")
             # cleanup output and confirm operation completed
         
         # orderopt3: list indexes and update an existing order's STATUS
@@ -283,13 +290,24 @@ while True:
             clearConsole()
             print(f"Updated order index {indexupd} status from \"{indextempstatus}\" to \"{orders[indexupd]['status']}\"!")
             
-        #TODO orderopt4: list indexes, for each property: if input is not blank -> update property, else skip to next property
+        # orderopt4: list indexes, update dict at index with user input if not blank/noneType
         elif ordermenu == 4:
             clearConsole()
             showOrders()
-            indexupd = int(input("Select index of order to update: "))
-            # if uinput is blank do not update respective dict property, else update
-        
+            indexToUpdate = int(input("\nSelect index of order to update: "))
+            # cache oldDict and entries to update
+            oldDict = orders[indexToUpdate]            
+            updateTo_oldDict = newOrder()
+            
+            # if input is blank/noneType do not update respective dict property, else update
+            print(f"Updating order: {oldDict}\n")
+            
+            # update old dict
+            orders[indexToUpdate].update({k:v for k, v in updateTo_oldDict.items() if v and (k != 'status')})
+            
+            # confirmation of updated order
+            print(f"Order index {indexToUpdate} updated to:\n {orders[indexToUpdate]}")
+                 
         # orderopt5: list indexes and delete an existing order at index
         elif ordermenu == 5:
             showOrders()
