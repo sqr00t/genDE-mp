@@ -282,10 +282,15 @@ while True:
             indexupd = int(input(f"\nEnter the index of the order status you want to change: "))
             clearConsole()
             
-            # store value at selected index for later printing, update index value
+            # store value at selected index for later printing
             indextempstatus = orders[indexupd]['status']
-            orders[indexupd]['status'] = input("Enter new order status: ")
+            # print status list options, update index value
+            statuslist = ["PREPARING", "READY FOR DELIVERY", "OUT FOR DELIVERY", "DELIVERED"]
+            for i, status in enumerate(statuslist):
+                print(f"  {i}: {status}")
             
+            orders[indexupd]['status'] = statuslist[int(input("Enter order status index to update: "))]
+
             # cleanup output and confirm operation completed
             clearConsole()
             print(f"Updated order index {indexupd} status from \"{indextempstatus}\" to \"{orders[indexupd]['status']}\"!")
