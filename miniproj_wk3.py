@@ -33,7 +33,7 @@ except FileNotFoundError:
         couriers = []
         print("Made new couriers list file as couriers.txt\n\n")
 
-# load initial dictionary, #TODO file loading CSV for orders dictionary
+# load initial dictionary
 orders = [{
     "customer_name": "John",
     "customer_address": "Unit 2, 12 Main Street, LONDON, WH1 2ER",
