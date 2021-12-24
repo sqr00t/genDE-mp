@@ -66,7 +66,7 @@ def showCouriers(dictslist, listName):
     showList(dictslist, listName)
     # this is effectively an overloaded showList function, if couriers is specified in args
     try:
-        choice = input("Enter index of courier to assign to this order: ")
+        choice = int(input("Enter index of courier to assign to this order: "))
     except ValueError:
         choice = None
     finally: #will this break intended flow?
