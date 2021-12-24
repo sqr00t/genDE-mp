@@ -53,7 +53,7 @@ def showOrders():
         print(f"Order Index {i}: {item}")
     return "\n"
 
-# refactored show list
+# refactored show list to be agnostic between submenu types
 def showList(dictslist, listName):
     clearConsole()
     print(f"{listName} list contains:\n")
@@ -62,16 +62,22 @@ def showList(dictslist, listName):
     return print("\n")
 
 # shows couriers list, prompt user for choice to assign to orders dict<<
-def showCouriers():
-    for i, item in enumerate(couriers):
-        print(f"{i}: {item}")
-    
+def showCouriers(dictslist, listName):
+    showList(dictslist, listName)
+    # this is effectively an overloaded showList function, if couriers is specified in args
     try:
         choice = input("Enter index of courier to assign to this order: ")
     except ValueError:
         choice = None
-        
-    return choice
+    finally: #will this break intended flow?
+        return choice
+
+def orderItems(dictslist, listName):
+    showList(dictslist, listName)
+    # this is effectively an overloaded showList function, if products is specified in args
+    # necessary to bundle these functionality together
+    itemsIntList = [int(i) for i in input("Enter comma-separated product index values: ").split(',')]
+    return itemsIntList
 
 # makes new order dictionary, returns new dictionary
 def newOrder():
@@ -81,8 +87,9 @@ def newOrder():
         "customer_name": input("Enter customer name: "),
         "customer_address": input("Enter customer address: "),
         "customer_phone": input("Enter customer phone number: "),
-        "courier": showCouriers(),
-        "status": "PREPARING"
+        "courier": showCouriers(couriers, "Couriers"),
+        "status": "PREPARING",
+        "items": orderItems(products, "Products")
     }
     
     clearConsole()
@@ -100,9 +107,27 @@ def newProduct():
         newDict['price'] = float(newDict['price'])
     except ValueError:
         newDict['price'] = None
+    finally:
+        clearConsole()
+        return newDict
+        
+def newCourier():
+    clearConsole()
+    newDict = {
+        "name": input("Enter new courier name: "),
+        "phone": input("Enter new courier phone no.: ")
+    }
     
     clearConsole()
     return newDict
+
+def deleteListItem(dictslist, listName):
+    showList(dictslist, listName)
+    indexdel = int(input(f"\nEnter the index of the {listNameLower} you want to remove: "))
+    
+    # cleanup output and confirm operation completed
+    clearConsole()
+    return print(f"Removed \"{dictslist.pop(indexdel)}\" from {listName.lower()} list!\n")
 
 ## Init app!
 # load products list with .csv contents, make new file if file not found
@@ -150,12 +175,12 @@ while True:
 
     # init product menu options and prompt user
     while mainmenu == 1:
-        listName = "Products"
-        prodopts = ["Products Menu: Options", "  1:  List products",
-                    "  2:  Insert a product", "  3:  Update existing product",
-                    "  4:  Remove a product", "  0:  Return to main menu"]
+        listName, listNameLower = "Products", "product"
+        prodopts = [f"{listName} Menu: Options", f"  1:  List {listName.lower()}",
+                       f"  2:  Insert {listNameLower}", f"  3:  Update existing {listNameLower}",
+                       f"  4:  Remove {listNameLower}", f"  0:  Return to main menu"]
         for opts in prodopts: print(opts)
-        prodmenu = int(input("Enter 1, 2, 3, 4, or 0:\n"))
+        prodmenu = int(input("\nChoose an option by entering it's index: "))
             # To-do-1: make prodmenu into function/class, default clearConsole(), then overload prodmenu with options #
         clearConsole()
         
@@ -173,47 +198,37 @@ while True:
         elif prodmenu == 2:
             # newProduct() gets input for name:price and returns newdict entry
             products.append(newProduct())
-            print(f"Added product \"{products[-1]}\" to product list!\n")
+            print(f"Added {listNameLower} \"{products[-1]}\" to {listName.lower()} list!\n")
             
         # prodopt3: list indexes and update an existing product
-        elif prodmenu == 3:
+        elif prodmenu == 3: #TODO use action mapping to define respective input arguments
             showList(products, listName)
-            indexToUpdate = int(input("Enter the index of the product you want to change: "))
+            indexToUpdate = int(input(f"Enter the index of the {listNameLower} you want to change: "))
             
             # store value at selected index for later printing
             oldDict = products[indexToUpdate]
             
-            # if input is blank/noneType do not update respective dict property, else update
-            print(f"Updating product: {oldDict}\n")
-            updateProductValues = newProduct()
+            # get new dict values to update oldDict
+            print(f"Updating {listNameLower}: {oldDict}\n")
+            updateValues = newProduct()
             
-            # update old dict
-            products[indexToUpdate].update({k:v for k, v in updateProductValues.items() if v})
+            # if input is blank/noneType do not update respective dict property, else update
+            products[indexToUpdate].update({k:v for k, v in updateValues.items() if v})
             
             # confirmation of updated order
-            print(f"Product index {indexToUpdate} updated to: {products[indexToUpdate]}\n")
+            print(f"{listName[:-1]} index {indexToUpdate} updated to: {products[indexToUpdate]}\n")
         
         # prodopt4: list indexes and delete an existing product
-        elif prodmenu == 4:
-            showList(products, listName)
-            indexdel = int(input("Enter the index of the product you want to remove: "))
-            
-            # cleanup output and confirm operation completed
-            clearConsole()
-            print(f"Removed \"{products.pop(indexdel)}\" from product list!\n")
+        elif prodmenu == 4: deleteListItem(products, listName)
     
     # init couriers menu options and prompt user
     while mainmenu == 2:
-        courieropts = ["List courier names", "Insert a courier name",
-                    "Update existing courier name", "Remove a courier name",
-                    "Return to main menu"]
-        print(f"Courier Names Menu: Options\n\n",
-            f"  1:  {courieropts[0]}\n",
-            f"  2:  {courieropts[1]}\n",
-            f"  3:  {courieropts[2]}\n",
-            f"  4:  {courieropts[3]}\n",
-            f"  0:  {courieropts[4]}\n")
-        couriermenu = int(input("Enter 1, 2, 3, 4, or 0:\n"))
+        listName, listNameLower = "Couriers", "courier"
+        courieropts = [f"{listName} Menu: Options", f"  1:  List {listName.lower()}",
+                       f"  2:  Insert {listNameLower}", f"  3:  Update existing {listNameLower}",
+                       f"  4:  Remove {listNameLower}", f"  0:  Return to main menu"]
+        for opts in courieropts: print(opts)
+        couriermenu = int(input("\nChoose an option by entering it's index: "))
             # To-do-1: make couriermenu into function/class, default clearConsole(), then overload couriermenu with options #
         clearConsole()
         
@@ -224,56 +239,46 @@ while True:
             break
         
         # couropt1: list couriers
-        elif couriermenu == 1:
-            clearConsole()
-            print(f"Couriers list contains:\n {[i for i in couriers]} \n")
+        elif couriermenu == 1: showList(couriers, listName)
 
         # couropt2: add to couriers list
         elif couriermenu == 2:
-            clearConsole()
-            couriers.append(input("Enter a new courier name: "))
-            
-            # cleanup output and confirm operation completed
-            clearConsole()
-            print(f"Added \"{couriers[-1]}\" to couriers list!\n")
+            # newCourier() gets input for name:phone and returns newdict entry
+            couriers.append(newCourier())
+            print(f"Added {listNameLower} \"{couriers[-1]}\" to {listName.lower()} list!\n")
         
         # couropt3: list indexes and update an existing courier
         elif couriermenu == 3:
-            clearConsole()
-            for i in range(len(couriers)):
-                print(f"{i}: ", couriers[i])
-            indexupd = int(input("Enter the index of the courier name you want to change: "))
+            showList(couriers, listName)
+            indexToUpdate = int(input(f"Enter the index of the {listNameLower} you want to change: "))
             
-            # store value at selected index for later printing, update index value
-            indexupdtemp = couriers[indexupd]
-            couriers[indexupd] = input("Enter courier name to update this with: ")
+            # store value at selected index for later printing
+            oldDict = couriers[indexToUpdate]
             
-            # cleanup output and confirm operation completed
-            clearConsole()
-            print(f"Updated \"{indexupdtemp}\" with \"{couriers[indexupd]}\"!\n")
+            # get new dict values to update oldDict
+            print(f"Updating {listNameLower}: {oldDict}\n")
+            updateValues = newCourier()
+            
+            # if input is blank/noneType do not update respective dict property, else update
+            couriers[indexToUpdate].update({k:v for k, v in updateValues.items() if v})
+            
+            # confirmation of updated order
+            print(f"{listName[:-1]} index {indexToUpdate} updated to: {couriers[indexToUpdate]}\n")
         
         # couropt4: list indexes and delete an existing courier
-        elif couriermenu == 4:
-            clearConsole()
-            for i in range(len(couriers)):
-                print(f"{i}: ", couriers[i])
-            indexdel = int(input("Enter the index of the courier name you want to remove: "))
-            
-            # cleanup output and confirm operation completed
-            clearConsole()
-            print(f"Removed \"{couriers.pop(indexdel)}\" from courier names list!\n")
+        elif couriermenu == 4: deleteListItem(couriers, listName)
     
     # init orders menu options and prompt user
     while mainmenu == 3:
-        listName = "Orders"
+        listName, listNameLower = "Orders", "order"
         # initiate ordermenu and show options, returns choice
-        ordersopts = ["Return to main menu", "Show orders dictionary list", "Add an order",
-                "Update existing order status", "Update an existing order", "Remove an order",
-                f"Orders Menu: Options\n", "\nChoose an option by entering it's index: "]
-        print(f"\n{ordersopts[-2]}")
-        for i in range(0, len(ordersopts)-2):
-            print(f"  {i}:  {ordersopts[i]}")
-        ordermenu = int(input(ordersopts[-1]))
+        ordersopts = [f"{listName} Menu: Options", f"  1:  List {listName.lower()}",
+                       f"  2:  Insert {listNameLower}", f"  3:  Update {listNameLower} status",
+                       f"  4:  Update existing {listNameLower}", f"  5:  Remove {listNameLower}",
+                       f"  0:  Return to main menu"]
+        for opts in ordersopts: print(opts)
+        ordermenu = int(input("\nChoose an option by entering it's index: "))
+        clearConsole()
         
         # orderopt0: exit couriers menu while loop to return to main menu
         if ordermenu == 0:
@@ -288,11 +293,13 @@ while True:
         elif ordermenu == 2:
             orders.append(newOrder())
             print(f"Added order \"{orders[-1]}\" to orders list!")
+            # make newOrder dictionary
+            # see updated newOrder func
+            
         
         # orderopt3: list indexes and update an existing order's STATUS
         elif ordermenu == 3:
-            clearConsole()
-            showOrders()
+            showList(orders, listName)
             indexupd = int(input(f"\nEnter the index of the order status you want to change: "))
             clearConsole()
             
@@ -310,7 +317,7 @@ while True:
             print(f"Updated order index {indexupd} status from \"{indextempstatus}\" to \"{orders[indexupd]['status']}\"!")
             
         # orderopt4: list indexes, update dict at index with user input if not blank/noneType
-        elif ordermenu == 4:
+        elif ordermenu == 4: #TODO refactor this, k != 'status' remains true for other menus
             showList(orders, listName)
             indexToUpdate = int(input("\nSelect index of order to update: "))
             # cache oldDict and entries to update
@@ -327,10 +334,4 @@ while True:
             print(f"Order index {indexToUpdate} updated to:\n {orders[indexToUpdate]}")
                  
         # orderopt5: list indexes and delete an existing order at index
-        elif ordermenu == 5:
-            showOrders()
-            indexdel = int(input("\nEnter the index of the order you want to remove: "))
-            
-            # cleanup output and confirm operation completed
-            clearConsole()
-            print(f"Removed \"{orders.pop(indexdel)}\" from orders list!\n")
+        elif ordermenu == 5: deleteListItem(orders, listName)
