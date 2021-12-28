@@ -20,9 +20,9 @@ def fileLoader(filename):
         with open(fileinsamedir(filename), 'w') as file:
             dictslist = []
             print(f"Cannot find {filename} in app folder, made new {filename}\n")
-    finally: # can be redacted and put in showlist()
-        print(f"{filename[:-4].capitalize()} list contains:")
-        for dicts in dictslist: print(dicts)
+    finally: # can be redacted and put in showlist(), list showing may not be needed at fileloading
+        #print(f"{filename[:-4].capitalize()} list contains:")
+        #for dicts in dictslist: print(dicts)
         return dictslist
 
 # writing dictslist to filename.csv
@@ -33,7 +33,7 @@ def fileWriter(dictslist, filename):
         writer.writerows(dictslist)
     
 ## Sub-menu specific functions
-# ordersmenu function welcome (to be deprecated), TODO refactor later
+# ordersmenu function welcome (to be deprecated), #TODO refactor later
 def ordermenu(): 
     ordersopts = ["Return to main menu", "Show orders dictionary list", "Add an order",
                 "Update existing order status", "Update an existing order", "Remove an order",
@@ -79,6 +79,7 @@ def orderItems(dictslist, listName):
     itemsIntList = [int(i) for i in input("Enter comma-separated product index values: ").split(',')]
     return itemsIntList
 
+## NewDicts
 # makes new order dictionary, returns new dictionary
 def newOrder():
     clearConsole()
@@ -121,6 +122,23 @@ def newCourier():
     clearConsole()
     return newDict
 
+#TODO using self.newDictFunc to call newDict in class when needed, instead of passing as arg which will call it at func init.
+def updateDict(dictslist, listNameLower, newDictFunc):
+    showList(dictslist, listNameLower)
+    indexToUpdate = int(input(f"\nSelect index of {listNameLower} to update: "))
+    # cache oldDict and entries to update
+    oldDict = dictslist[indexToUpdate]
+    
+    # if input is blank/noneType do not update respective dict property, else update
+    print(f"Updating {listNameLower}: {oldDict}\n")
+    updateOrdersValues = newDictFunc
+    
+    # update old dict
+    dictslist[indexToUpdate].update({k:v for k, v in updateOrdersValues.items() if v and (k != 'status')})
+    
+    # confirmation of updated order
+    print(f"{listNameLower} index {indexToUpdate} updated to:\n {dictslist[indexToUpdate]}")
+
 def deleteListItem(dictslist, listName):
     showList(dictslist, listName)
     indexdel = int(input(f"\nEnter the index of the {listNameLower} you want to remove: "))
@@ -130,6 +148,7 @@ def deleteListItem(dictslist, listName):
     return print(f"Removed \"{dictslist.pop(indexdel)}\" from {listName.lower()} list!\n")
 
 ## Init app!
+clearConsole()
 # load products list with .csv contents, make new file if file not found
 products = fileLoader("products.csv")
 # modify to account for 'price' being a float
@@ -145,11 +164,10 @@ for dicts in orders:
     dicts['courier'] = int(dicts['courier'])
     dicts['items'] = [int(i) for i in dicts['items'].strip("][").split(",")]
 
-clearConsole()
 print("Welcome to Solomon's Mini Project1: Products and Couriers Manager App\n")
 
 # To-do-2: catch incorrect input errors
-while True:
+while True:   
     # init main menu options and prompt choice
     mainopts = ["Main Menu Options:","  1:  Products Menu",
                 "  2:  Couriers Menu","  3:  Orders Menu", "  0:  Exit app"]
@@ -201,23 +219,8 @@ while True:
             print(f"Added {listNameLower} \"{products[-1]}\" to {listName.lower()} list!\n")
             
         # prodopt3: list indexes and update an existing product
-        elif prodmenu == 3: #TODO use action mapping to define respective input arguments
-            showList(products, listName)
-            indexToUpdate = int(input(f"Enter the index of the {listNameLower} you want to change: "))
-            
-            # store value at selected index for later printing
-            oldDict = products[indexToUpdate]
-            
-            # get new dict values to update oldDict
-            print(f"Updating {listNameLower}: {oldDict}\n")
-            updateValues = newProduct()
-            
-            # if input is blank/noneType do not update respective dict property, else update
-            products[indexToUpdate].update({k:v for k, v in updateValues.items() if v})
-            
-            # confirmation of updated order
-            print(f"{listName[:-1]} index {indexToUpdate} updated to: {products[indexToUpdate]}\n")
-        
+        elif prodmenu == 3: updateDict(products, listNameLower, newProduct())
+
         # prodopt4: list indexes and delete an existing product
         elif prodmenu == 4: deleteListItem(products, listName)
     
@@ -248,22 +251,7 @@ while True:
             print(f"Added {listNameLower} \"{couriers[-1]}\" to {listName.lower()} list!\n")
         
         # couropt3: list indexes and update an existing courier
-        elif couriermenu == 3:
-            showList(couriers, listName)
-            indexToUpdate = int(input(f"Enter the index of the {listNameLower} you want to change: "))
-            
-            # store value at selected index for later printing
-            oldDict = couriers[indexToUpdate]
-            
-            # get new dict values to update oldDict
-            print(f"Updating {listNameLower}: {oldDict}\n")
-            updateValues = newCourier()
-            
-            # if input is blank/noneType do not update respective dict property, else update
-            couriers[indexToUpdate].update({k:v for k, v in updateValues.items() if v})
-            
-            # confirmation of updated order
-            print(f"{listName[:-1]} index {indexToUpdate} updated to: {couriers[indexToUpdate]}\n")
+        elif couriermenu == 3: updateDict(couriers, listNameLower, newCourier())
         
         # couropt4: list indexes and delete an existing courier
         elif couriermenu == 4: deleteListItem(couriers, listName)
@@ -295,7 +283,6 @@ while True:
             print(f"Added order \"{orders[-1]}\" to orders list!")
             # make newOrder dictionary
             # see updated newOrder func
-            
         
         # orderopt3: list indexes and update an existing order's STATUS
         elif ordermenu == 3:
@@ -317,21 +304,7 @@ while True:
             print(f"Updated order index {indexupd} status from \"{indextempstatus}\" to \"{orders[indexupd]['status']}\"!")
             
         # orderopt4: list indexes, update dict at index with user input if not blank/noneType
-        elif ordermenu == 4: #TODO refactor this, k != 'status' remains true for other menus
-            showList(orders, listName)
-            indexToUpdate = int(input("\nSelect index of order to update: "))
-            # cache oldDict and entries to update
-            oldDict = orders[indexToUpdate]
-            
-            # if input is blank/noneType do not update respective dict property, else update
-            print(f"Updating order: {oldDict}\n")            
-            updateOrdersValues = newOrder()
-            
-            # update old dict
-            orders[indexToUpdate].update({k:v for k, v in updateOrdersValues.items() if v and (k != 'status')})
-            
-            # confirmation of updated order
-            print(f"Order index {indexToUpdate} updated to:\n {orders[indexToUpdate]}")
-                 
+        elif ordermenu == 4: updateDict(orders, listNameLower, newOrder())
+        
         # orderopt5: list indexes and delete an existing order at index
         elif ordermenu == 5: deleteListItem(orders, listName)
