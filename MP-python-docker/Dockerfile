@@ -7,3 +7,9 @@ CMD python /application/mp1.py
 # --rm: removes container on exit
 # -it: interactive terminal mode
 # -v: specifies volume mount
+
+# docker ps -all -> list all and recently run containers
+# docker images -> list all images
+# docker rm containername -> stops & removes containername
+# docker rmi imagename:imagetag -> removes imagename:imagetag
+# docker build . -t test:v1 -> builds image in file
