@@ -2,9 +2,7 @@
 
 ## Welcome to my miniproject app repo
 
-Hover your mouse over the gif!
-
-![Dm me on slack or discord to explain any code](https://c.tenor.com/ihqN6a3iiYEAAAAC/pikachu-shocked-face-stunned.gif)
+<img src="/pikachuwow.gif?raw=true" width="200px">
 
 ### Latest update
 
