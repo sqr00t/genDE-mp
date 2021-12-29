@@ -13,5 +13,4 @@
   * BONUS List orders by status or courier?
   * Refactor menus and list printouts.
   * Group functions into classes, map functions with action dicts.
-  * Hi
   
