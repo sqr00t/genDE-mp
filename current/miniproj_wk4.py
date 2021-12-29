@@ -31,28 +31,8 @@ def fileWriter(dictslist, filename):
         writer = csv.DictWriter(file, fieldnames=dictslist[0].keys())
         writer.writeheader()
         writer.writerows(dictslist)
-    
+
 ## Sub-menu specific functions
-# ordersmenu function welcome (to be deprecated), #TODO refactor later
-def ordermenu(): 
-    ordersopts = ["Return to main menu", "Show orders dictionary list", "Add an order",
-                "Update existing order status", "Update an existing order", "Remove an order",
-                f"Orders Menu: Options\n", "\nChoose an option by entering it's index: "]
-    print(ordersopts[-2])
-    for i in range(0, len(ordersopts)-2):
-        print(f"  {i}:  {ordersopts[i]}")
-    choice = int(input(ordersopts[-1]))
-    
-    return choice
-
-# shows orders list
-def showOrders():
-    clearConsole()
-    print(f"Orders list contains:\n")
-    for i, item in enumerate(orders):
-        print(f"Order Index {i}: {item}")
-    return "\n"
-
 # refactored show list to be agnostic between submenu types
 def showList(dictslist, listName):
     clearConsole()
@@ -121,6 +101,10 @@ def newCourier():
     
     clearConsole()
     return newDict
+
+def insertListItem(dictslist, listFunction, listName, listNameLower):
+    dictslist.append(listFunction)
+    return print(f"Added {listNameLower} \"{dictslist[-1]}\" to {listName.lower()} list!")
 
 #TODO using self.newDictFunc to call newDict in class when needed, instead of passing as arg which will call it at func init.
 def updateDict(dictslist, listNameLower, newDictFunc):
@@ -213,10 +197,7 @@ while True:
         elif prodmenu == 1: showList(products, listName)
 
         # prodopt2: add to products list    
-        elif prodmenu == 2:
-            # newProduct() gets input for name:price and returns newdict entry
-            products.append(newProduct())
-            print(f"Added {listNameLower} \"{products[-1]}\" to {listName.lower()} list!\n")
+        elif prodmenu == 2: insertListItem(products, newProduct(), listName, listNameLower)# see updated newProduct func
             
         # prodopt3: list indexes and update an existing product
         elif prodmenu == 3: updateDict(products, listNameLower, newProduct())
@@ -245,10 +226,7 @@ while True:
         elif couriermenu == 1: showList(couriers, listName)
 
         # couropt2: add to couriers list
-        elif couriermenu == 2:
-            # newCourier() gets input for name:phone and returns newdict entry
-            couriers.append(newCourier())
-            print(f"Added {listNameLower} \"{couriers[-1]}\" to {listName.lower()} list!\n")
+        elif couriermenu == 2: insertListItem(couriers, newCourier(), listName, listNameLower)# see updated newCourier func
         
         # couropt3: list indexes and update an existing courier
         elif couriermenu == 3: updateDict(couriers, listNameLower, newCourier())
@@ -278,11 +256,7 @@ while True:
         elif ordermenu == 1: showList(orders, listName)
 
         # orderopt2: add to orders list
-        elif ordermenu == 2:
-            orders.append(newOrder())
-            print(f"Added order \"{orders[-1]}\" to orders list!")
-            # make newOrder dictionary
-            # see updated newOrder func
+        elif ordermenu == 2: insertListItem(orders, newOrder(), listName, listNameLower)# see updated newOrder func  
         
         # orderopt3: list indexes and update an existing order's STATUS
         elif ordermenu == 3:
