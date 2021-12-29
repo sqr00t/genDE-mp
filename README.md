@@ -2,7 +2,7 @@
 
 ## Welcome to my miniproject app repo
 
-<img src="/pikachuwow.gif?raw=true" width="200px">
+<img src="/pikachuwow.gif?raw=true">
 
 ### Latest update
 
