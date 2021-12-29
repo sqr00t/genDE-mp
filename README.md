@@ -13,13 +13,3 @@
   * BONUS List orders by status or courier?
   * Refactor menus and list printouts.
   * Group functions into classes, map functions with action dicts.
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-  
-=======
->>>>>>> parent of b6d4842 (updated readme as demo)
-=======
->>>>>>> parent of b6d4842 (updated readme as demo)
-=======
->>>>>>> parent of b6d4842 (updated readme as demo)
