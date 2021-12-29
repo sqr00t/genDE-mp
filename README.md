@@ -15,7 +15,10 @@
   * Group functions into classes, map functions with action dicts.
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   
+=======
+>>>>>>> parent of b6d4842 (updated readme as demo)
 =======
 >>>>>>> parent of b6d4842 (updated readme as demo)
 =======
