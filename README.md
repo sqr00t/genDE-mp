@@ -1,5 +1,7 @@
 # Welcome to Solomon's miniproject app repo
 
+<img src = "https://img.shields.io/badge/last%20commit-29%2F12%2F2021%2002%3A00-red">
+
 <img src="/pikachuwow.gif?raw=true">
 
 # Latest update
