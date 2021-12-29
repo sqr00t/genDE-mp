@@ -1,10 +1,8 @@
-# SolomonYu-miniproj
-
-## Welcome to my miniproject app repo
+# Welcome to Solomon's miniproject app repo
 
 <img src="/pikachuwow.gif?raw=true">
 
-### Latest update
+# Latest update
 
 * Week 4 (284 lines, inc 69 comment lines. actual 215 lines):
   * Goals completed except from BONUS
