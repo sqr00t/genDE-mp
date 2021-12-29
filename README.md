@@ -6,9 +6,10 @@ Dm me on slack or discord to explain any code
 
 ### Latest update
 
-* Week 4 (290 lines, inc 70 comment lines. actual 230 lines):
+* Week 4 (284 lines, inc 69 comment lines. actual 215 lines):
   * Goals completed except from BONUS
   * Removed deprecated functions
 * TODO:
-  * List orders by status or courier?
-  * Refactor menus and group functions into classes.
+  * BONUS List orders by status or courier?
+  * Refactor menus and list printouts.
+  * Group functions into classes, map functions with action dicts.
