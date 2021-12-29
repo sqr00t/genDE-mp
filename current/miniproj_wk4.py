@@ -156,7 +156,7 @@ while True:
     mainopts = ["Main Menu Options:","  1:  Products Menu",
                 "  2:  Couriers Menu","  3:  Orders Menu", "  0:  Exit app"]
     for opts in mainopts: print(opts)
-    mainmenu = int(input("Enter 1, 2, 3 or 0:\n"))
+    mainmenu = int(input("\nChoose an option by entering it's index: "))
     clearConsole()
             
     # exit main menu while loop and subsequently the app

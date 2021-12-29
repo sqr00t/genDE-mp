@@ -102,6 +102,10 @@ def newCourier():
     clearConsole()
     return newDict
 
+def insertListItem(dictslist, listFunction, listName, listNameLower):
+    dictslist.append(listFunction)
+    return print(f"Added {listNameLower} \"{dictslist[-1]}\" to {listName.lower()} list!")
+
 #TODO using self.newDictFunc to call newDict in class when needed, instead of passing as arg which will call it at func init.
 def updateDict(dictslist, listNameLower, newDictFunc):
     showList(dictslist, listNameLower)
@@ -152,7 +156,7 @@ while True:
     mainopts = ["Main Menu Options:","  1:  Products Menu",
                 "  2:  Couriers Menu","  3:  Orders Menu", "  0:  Exit app"]
     for opts in mainopts: print(opts)
-    mainmenu = int(input("Enter 1, 2, 3 or 0:\n"))
+    mainmenu = int(input("\nChoose an option by entering it's index: "))
     clearConsole()
             
     # exit main menu while loop and subsequently the app
@@ -193,10 +197,7 @@ while True:
         elif prodmenu == 1: showList(products, listName)
 
         # prodopt2: add to products list    
-        elif prodmenu == 2:
-            # newProduct() gets input for name:price and returns newdict entry
-            products.append(newProduct())
-            print(f"Added {listNameLower} \"{products[-1]}\" to {listName.lower()} list!\n")
+        elif prodmenu == 2: insertListItem(products, newProduct(), listName, listNameLower)# see updated newProduct func
             
         # prodopt3: list indexes and update an existing product
         elif prodmenu == 3: updateDict(products, listNameLower, newProduct())
@@ -225,10 +226,7 @@ while True:
         elif couriermenu == 1: showList(couriers, listName)
 
         # couropt2: add to couriers list
-        elif couriermenu == 2:
-            # newCourier() gets input for name:phone and returns newdict entry
-            couriers.append(newCourier())
-            print(f"Added {listNameLower} \"{couriers[-1]}\" to {listName.lower()} list!\n")
+        elif couriermenu == 2: insertListItem(couriers, newCourier(), listName, listNameLower)# see updated newCourier func
         
         # couropt3: list indexes and update an existing courier
         elif couriermenu == 3: updateDict(couriers, listNameLower, newCourier())
@@ -258,11 +256,7 @@ while True:
         elif ordermenu == 1: showList(orders, listName)
 
         # orderopt2: add to orders list
-        elif ordermenu == 2:
-            orders.append(newOrder())
-            print(f"Added order \"{orders[-1]}\" to orders list!")
-            # make newOrder dictionary
-            # see updated newOrder func
+        elif ordermenu == 2: insertListItem(orders, newOrder(), listName, listNameLower)# see updated newOrder func  
         
         # orderopt3: list indexes and update an existing order's STATUS
         elif ordermenu == 3:
