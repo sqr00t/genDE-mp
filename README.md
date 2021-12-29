@@ -2,7 +2,7 @@
 
 ## Welcome to my miniproject app repo
 
-<img src="https://c.tenor.com/ihqN6a3iiYEAAAAC/pikachu-shocked-face-stunned.gif?raw=true" width="200px">
+<img src="/pikachuwow.gif?raw=true" width="200px">
 
 ### Latest update
 
