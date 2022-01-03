@@ -6,19 +6,20 @@ class BaseFunctions: #"filenames.csv"
     def __init__(self, filename: str, dictslist=None):
         #reusable var init
         self.filepath = os.path.join(sys.path[0], str(filename))
-        self.listname = str(filename)[:-4]
-        self.listname_title = str(filename)[:-4].title()
+        self.filename = str(filename)
+        self.listname = filename[:-4]
+        self.listname_title = filename[:-4].title()
         self.dictslist = dictslist
         #fileloading
         if self.dictslist is None:
             try:
                 with open(self.filepath, 'r') as file:
                     self.dictslist = [dicts for dicts in csv.DictReader(file)]
-                    print(f"Loaded {filename} into {self.listname} list.\n")
+                    print(f"Loaded {self.filename} into {self.listname} list.\n")
             except FileNotFoundError:
                 with open(self.filepath, 'w') as file:
                     self.dictslist = []
-                    print(f"Cannot find {filename} in app folder, made new {filename}\n")
+                    print(f"Cannot find {self.filename} in app folder, made new {self.filename}\n")
     
     #write to file on object destructor call
     def __del__(self):

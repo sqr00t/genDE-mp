@@ -6,18 +6,20 @@ class BaseFunctions: #"filenames.csv"
     def __init__(self, filename: str, dictslist=None):
         #reusable var init
         self.filepath = os.path.join(sys.path[0], str(filename))
-        self.listname = str(filename[:-4])
-        self.listname_title = str(filename[:-4].title())
+        self.filename = str(filename)
+        self.listname = filename[:-4]
+        self.listname_title = filename[:-4].title()
+        self.dictslist = dictslist
         #fileloading
-        if dictslist is None:
+        if self.dictslist is None:
             try:
                 with open(self.filepath, 'r') as file:
                     self.dictslist = [dicts for dicts in csv.DictReader(file)]
-                    print(f"Loaded {filename} into {self.listname} list.\n")
+                    print(f"Loaded {self.filename} into {self.listname} list.\n")
             except FileNotFoundError:
                 with open(self.filepath, 'w') as file:
                     self.dictslist = []
-                    print(f"Cannot find {filename} in app folder, made new {filename}\n")
+                    print(f"Cannot find {self.filename} in app folder, made new {self.filename}\n")
     
     #write to file on object destructor call
     def __del__(self):
@@ -66,7 +68,7 @@ class BaseFunctions: #"filenames.csv"
 ##Products Class
 class Products(BaseFunctions):
     def __init__(self, filename: str):
-        super(BaseFunctions).__init__(self, filename, dictslist=None)
+        super().__init__(self, filename)
 
     # override new_dict()
     # make new and return products dictionary
@@ -86,7 +88,7 @@ class Products(BaseFunctions):
 ##Couriers Class
 class Couriers(BaseFunctions):
     def __init__(self, filename: str):
-        super(BaseFunctions).__init__(self, filename, dictslist=None)
+        super().__init__(self, filename)
 
     # override new_dict()
     # make new and return couriers dictionary
@@ -101,7 +103,7 @@ class Couriers(BaseFunctions):
 class Orders(BaseFunctions):
     # pass ProductsObj.dictslist and CouriersObj.dictslist as args on obj initialisation
     def __init__(self, filename: str, productslist, courierslist):
-        super(BaseFunctions).__init__(self, filename, dictslist=None)
+        super().__init__(self, filename)
         self.products, self.products_list_name = productslist, "products"
         self.couriers, self.couriers_list_name = courierslist, "couriers"
     
