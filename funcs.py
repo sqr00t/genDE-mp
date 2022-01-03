@@ -2,15 +2,15 @@
 import os, sys, csv
 from os import system, name
 
-# function to get current script directory
+# function to get current script directory ->ListFunctions
 def fileinsamedir(filename):
     return os.path.join(sys.path[0], str(filename))
 
-# function to clear console output irrespective of windows/unix
+# function to clear console output irrespective of windows/unix ->(Sub)Menu
 def clearConsole():
     return system('cls') if name == 'nt' else system('clear')
 
-# Initial file loaders to list
+# Initial file loaders to list ->ListFunctions constructor
 def fileLoader(filename):
     try:
         with open(fileinsamedir(filename), 'r') as file:
@@ -25,7 +25,7 @@ def fileLoader(filename):
         #for dicts in dictslist: print(dicts)
         return dictslist
 
-# writing dictslist to filename.csv
+# writing dictslist to filename.csv ->ListFunctions destructor
 def fileWriter(dictslist, filename):
     with open(fileinsamedir(filename), 'w', newline='') as file:
         writer = csv.DictWriter(file, fieldnames=dictslist[0].keys())
@@ -33,7 +33,7 @@ def fileWriter(dictslist, filename):
         writer.writerows(dictslist)
 
 ## Sub-menu specific functions
-# refactored show list to be agnostic between submenu types
+# refactored show list to be agnostic between submenu types ->ListFunctions, override for orders
 def showList(dictslist, listName):
     clearConsole()
     print(f"{listName} list contains:\n")
@@ -42,6 +42,7 @@ def showList(dictslist, listName):
     return print("\n")
 
 # shows couriers list, prompt user for choice to assign to orders dict<<
+# ->ListFunctions, override for orders
 def showCouriers(dictslist, listName):
     showList(dictslist, listName)
     # this is effectively an overloaded showList function, if couriers is specified in args
@@ -51,7 +52,7 @@ def showCouriers(dictslist, listName):
         choice = None
     finally: #will this break intended flow?
         return choice
-
+# ->ListFunctions, override for orders
 def orderItems(dictslist, listName):
     showList(dictslist, listName)
     # this is effectively an overloaded showList function, if products is specified in args
@@ -60,7 +61,7 @@ def orderItems(dictslist, listName):
     return itemsIntList
 
 ## NewDicts
-# makes new order dictionary, returns new dictionary
+# makes new order dictionary, returns new dictionary ->override for respective list
 def newOrder():
     clearConsole()
     # make new empty dict, add property input line by line, clearConsole after each line
@@ -102,11 +103,12 @@ def newCourier():
     clearConsole()
     return newDict
 
+# ->ListFunctions, depends on overridden newDict()
 def insertListItem(dictslist, listFunction, listName, listNameLower):
     dictslist.append(listFunction)
     return print(f"Added {listNameLower} \"{dictslist[-1]}\" to {listName.lower()} list!")
 
-#TODO using self.newDictFunc to call newDict in class when needed, instead of passing as arg which will call it at func init.
+# ->ListFunctions, depends on overriden newDict()
 def updateDict(dictslist, listNameLower, newDictFunc):
     showList(dictslist, listNameLower)
     indexToUpdate = int(input(f"\nSelect index of {listNameLower} to update: "))
@@ -123,9 +125,10 @@ def updateDict(dictslist, listNameLower, newDictFunc):
     # confirmation of updated order
     print(f"{listNameLower} index {indexToUpdate} updated to:\n {dictslist[indexToUpdate]}")
 
+# ->ListFunctions, agnostic
 def deleteListItem(dictslist, listName):
     showList(dictslist, listName)
-    indexdel = int(input(f"\nEnter the index of the {listNameLower} you want to remove: "))
+    indexdel = int(input(f"\nEnter the index of the {listName} you want to remove: "))
     
     # cleanup output and confirm operation completed
     clearConsole()
