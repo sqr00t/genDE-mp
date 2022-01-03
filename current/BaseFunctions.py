@@ -7,8 +7,8 @@ class BaseFunctions: #"filenames.csv"
         #reusable var init
         self.filepath = os.path.join(sys.path[0], str(filename))
         self.filename = str(filename)
-        self.listname = filename[:-4]
-        self.listname_title = filename[:-4].title()
+        self.listname = self.filename[:-4]
+        self.listname_title = self.listname.title()
         self.dictslist = dictslist
         #fileloading
         if self.dictslist is None:
