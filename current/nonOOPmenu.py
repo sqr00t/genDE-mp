@@ -8,11 +8,9 @@ clearConsole()
 productsobj = Products("products.csv")
 couriersobj = Couriers("couriers.csv")
 ordersobj = Orders("orders.csv", productsobj, couriersobj)
+print("\nWelcome to Solomon's Mini Project!\n")
 
-print("Welcome to Solomon's Mini Project1\n")
-
-# To-do-2: catch incorrect input errors
-while True:   
+while True:
     # init main menu options and prompt choice
     mainopts = ["Main Menu Options:","  1:  Products Menu",
                 "  2:  Couriers Menu","  3:  Orders Menu", "  0:  Exit app"]
@@ -26,7 +24,6 @@ while True:
         print("Saving lists and exiting app...")
         productsobj.save_file(), couriersobj.save_file(), ordersobj.save_file()
         del productsobj, couriersobj, ordersobj
-
         break
 
     # init product menu options and prompt user
@@ -37,7 +34,6 @@ while True:
                        f"  4:  Remove {listNameLower}", f"  0:  Return to main menu"]
         for opts in prodopts: print(opts)
         prodmenu = int(input("\nChoose an option by entering it's index: "))
-            # To-do-1: make prodmenu into function/class, default clearConsole(), then overload prodmenu with options #
         clearConsole()
         
         # prodopt0: exit products menu while loop to return to main menu
@@ -119,4 +115,4 @@ while True:
         
         # orderopt5: list indexes and delete an existing order at index
         elif ordermenu == 5: ordersobj.delete_dict()
-# 122 lines, 28 comment lines, total code lines: 94
+# 118 lines, 25 comment lines, total code lines: 93

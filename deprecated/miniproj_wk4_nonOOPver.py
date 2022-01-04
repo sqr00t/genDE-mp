@@ -106,7 +106,6 @@ def insertListItem(dictslist, listFunction, listName, listNameLower):
     dictslist.append(listFunction)
     return print(f"Added {listNameLower} \"{dictslist[-1]}\" to {listName.lower()} list!")
 
-#TODO using self.newDictFunc to call newDict in class when needed, instead of passing as arg which will call it at func init.
 def updateDict(dictslist, listNameLower, newDictFunc):
     showList(dictslist, listNameLower)
     indexToUpdate = int(input(f"\nSelect index of {listNameLower} to update: "))
