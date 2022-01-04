@@ -21,12 +21,12 @@ class BaseFunctions: #"filenames.csv"
                     self.dictslist = []
                     print(f"Cannot find {self.filename} in app folder, made new {self.filename}\n")
     
-    #write to file on object destructor call
-    def save_lists(self):
+    #write to file on object destructor call        
+    def save_file(self):
         with open(self.filepath, 'w', newline='') as file:
             writer = csv.DictWriter(file, fieldnames=self.dictslist[0].keys())
             writer.writeheader()
-            writer.writerows(self.dictslist)
+            writer.writerows(self.dictslist)    
     
     # list dicts in dictslist
     def show_dicts(self):
@@ -67,8 +67,9 @@ class BaseFunctions: #"filenames.csv"
 
 ##Products Class
 class Products(BaseFunctions):
-    def __init__(self, filename: str):
-        super().__init__(self, filename)
+    def __init__(self, *args, **kwargs):
+        super(Products, self).__init__(*args, **kwargs)
+        for dicts in self.dictslist: dicts['price'] = float(dicts['price'])
 
     # override new_dict()
     # make new and return products dictionary
@@ -87,8 +88,8 @@ class Products(BaseFunctions):
 
 ##Couriers Class
 class Couriers(BaseFunctions):
-    def __init__(self, filename: str):
-        super().__init__(self, filename)
+    def __init__(self, *args, **kwargs):
+        super(Couriers, self).__init__(*args, **kwargs)
 
     # override new_dict()
     # make new and return couriers dictionary
@@ -102,10 +103,13 @@ class Couriers(BaseFunctions):
 ##Orders class
 class Orders(BaseFunctions):
     # pass ProductsObj.dictslist and CouriersObj.dictslist as args on obj initialisation
-    def __init__(self, filename: str, productslist, courierslist):
-        super().__init__(self, filename)
+    def __init__(self, filename, productslist, courierslist):
+        super(Orders, self).__init__(filename, dictslist=None)
         self.products, self.products_list_name = productslist, "products"
         self.couriers, self.couriers_list_name = courierslist, "couriers"
+        for dicts in self.dictslist:
+            dicts['courier'] = int(dicts['courier'])
+            dicts['items'] = [int(i) for i in dicts['items'].strip("][").split(",")]
     
     # new show other lists for showing any lists with args
     def show_other_list(self, other_list, list_name: str):
@@ -158,3 +162,4 @@ class Orders(BaseFunctions):
         print(f"Updated order index {indexupd} status:\n",
               f"        from \"{indextempstatus}\"\n",
               f"          to \"{self.dictslist[indexupd]['status']}\"!")
+# 165 lines, 36 comment lines, total code lines: 129
