@@ -22,7 +22,7 @@ class BaseFunctions: #"filenames.csv"
                     print(f"Cannot find {self.filename} in app folder, made new {self.filename}\n")
     
     #write to file on object destructor call
-    def __del__(self):
+    def save_lists(self):
         with open(self.filepath, 'w', newline='') as file:
             writer = csv.DictWriter(file, fieldnames=self.dictslist[0].keys())
             writer.writeheader()
