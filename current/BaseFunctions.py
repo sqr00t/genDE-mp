@@ -15,18 +15,18 @@ class BaseFunctions: #"filenames.csv"
             try:
                 with open(self.filepath, 'r') as file:
                     self.dictslist = [dicts for dicts in csv.DictReader(file)]
-                    print(f"Loaded {self.filename} into {self.listname} list.\n")
+                    print(f"Loaded {self.filename} into {self.listname} list.")
             except FileNotFoundError:
                 with open(self.filepath, 'w') as file:
                     self.dictslist = []
-                    print(f"Cannot find {self.filename} in app folder, made new {self.filename}\n")
+                    print(f"Cannot find {self.filename} in app folder, made new {self.filename}")
     
-    #write to file on object destructor call        
+    #write to file on object destructor call
     def save_file(self):
         with open(self.filepath, 'w', newline='') as file:
             writer = csv.DictWriter(file, fieldnames=self.dictslist[0].keys())
             writer.writeheader()
-            writer.writerows(self.dictslist)    
+            writer.writerows(self.dictslist)
     
     # list dicts in dictslist
     def show_dicts(self):
@@ -158,7 +158,7 @@ class Orders(BaseFunctions):
         
         self.dictslist[indexupd]['status'] = statuslist[int(input("Enter order status index to update: "))]
         
-        # cleanup output and confirm operation completed\
+        # cleanup output and confirm operation completed
         print(f"Updated order index {indexupd} status:\n",
               f"        from \"{indextempstatus}\"\n",
               f"          to \"{self.dictslist[indexupd]['status']}\"!")
