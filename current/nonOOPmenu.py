@@ -1,5 +1,5 @@
 from os import system, name
-from MPFunctions import Products, Couriers, Orders
+from BaseFunctions import Products, Couriers, Orders
 
 def clearConsole(): return system('cls') if name == 'nt' else system('clear')
 
