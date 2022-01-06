@@ -1,5 +1,5 @@
 import os.path, sys, csv
-
+# 132 lines with comments and docstrings. 14 docstrings lines, 1 comment line. total: 117 lines
 class BaseFunctions: # list BaseFunctions object class. Pass to args: "filenames.csv"
     def __init__(self, filename: str, dictslist=None):
         """Inits obj with BaseFunctions class."""
@@ -8,7 +8,7 @@ class BaseFunctions: # list BaseFunctions object class. Pass to args: "filenames
         self.listname = self.filename[:-4]
         self.listname_title = self.listname.title()
         self.dictslist = dictslist
-        self.menu_options = [f"\n{self.listname_title} Menu Options:", f"  1:  Show {self.listname} list", f"  2:  Insert {self.listname[:-1]}",
+        self.menu_options = [f"\n{self.listname_title} Menu Options:\n", f"  1:  Show {self.listname} list", f"  2:  Insert {self.listname[:-1]}",
                              f"  3:  Update existing {self.listname[:-1]}", f"  4:  Remove {self.listname[:-1]}", f"  0:  Return to main menu"]
         if self.dictslist is None:
             try:
@@ -24,14 +24,12 @@ class BaseFunctions: # list BaseFunctions object class. Pass to args: "filenames
         """Save self.dictslist list of dictionaries to .csv file"""
         with open(self.filepath, 'w', newline='') as file:
             writer = csv.DictWriter(file, fieldnames=self.dictslist[0].keys())
-            writer.writeheader()
-            writer.writerows(self.dictslist)
+            writer.writeheader(), writer.writerows(self.dictslist)
     
     def show_dicts(self):
         """Lists dicts in self.dictslist"""
         print(f"{self.listname_title} list contains:\n")
-        for i, item in enumerate(self.dictslist):
-            print(f"{self.listname_title[:-1]} Index {i}: {item}")
+        for i, item in enumerate(self.dictslist): print(f"{self.listname_title[:-1]} Index {i}: {item}")
     
     def delete_dict(self):
         """List dicts in self.dictslist, prompts user for index of choice, remove dict at index"""
@@ -47,13 +45,12 @@ class BaseFunctions: # list BaseFunctions object class. Pass to args: "filenames
         return f"Added {self.dictslist[-1]} to {self.listname_title} list!"
 
     def update_dict(self):
-        """Calls new_dict(self) to make new dictionary, updates dictionary at prompted index."""
+        """Calls new_dict(self) to make new dictionary, updates dictionary at prompted index if new_dict not none."""
         self.show_dicts()
         indexToUpdate = int(input(f"\nSelect index of {self.listname[:-1].lower()} to update: "))
         oldDict = self.dictslist[indexToUpdate] # cache oldDict and entries to update
         print(f"Updating {self.listname[:-1]}: {oldDict}\n")
-        updateOrdersValues = self.new_dict() # make new dictionary with respective new_dict() template
-        # if self.new_dict() is blank/noneType do not update respective dict property, else update oldDict. confirm order updated
+        updateOrdersValues = self.new_dict()
         self.dictslist[indexToUpdate].update({k:v for k, v in updateOrdersValues.items() if v and (k != 'status')})
         print(f"{self.listname_title[:-1]} index {indexToUpdate} updated to:\n {self.dictslist[indexToUpdate]}")
 
@@ -66,8 +63,7 @@ class Products(BaseFunctions): ##Products Class
         """Overrided new_dict() in BaseFunctions. Returns dictionary with products dictionary template"""
         newDict = {
             "name": input("Enter new product name: "),
-            "price": input("Enter new product price: ")
-        }
+            "price": input("Enter new product price: ")}
         try: newDict['price'] = float(newDict['price']) # convert price input to float
         except ValueError: newDict['price'] = None
         finally: return newDict
@@ -79,9 +75,8 @@ class Couriers(BaseFunctions): ##Couriers Class
     def new_dict(self):
         """Overrided new_dict() in BaseFunctions. Returns dictionary with couriers dictionary template"""
         newDict = {
-        "name": input("Enter new courier name: "),
-        "phone": input("Enter new courier phone no.: ")
-        }
+            "name": input("Enter new courier name: "),
+            "phone": input("Enter new courier phone no.: ")}
         return newDict
 
 class Orders(BaseFunctions): ##Orders class
@@ -90,18 +85,15 @@ class Orders(BaseFunctions): ##Orders class
         super(Orders, self).__init__(filename, dictslist=None)
         self.products, self.products_list_name = productslist, "products"
         self.couriers, self.couriers_list_name = courierslist, "couriers"
-        self.menu_options = [f"\n{self.listname_title} Menu Options:", f"  1:  Show {self.listname} list", f"  2:  Insert {self.listname[:-1]}",
+        self.menu_options = [f"\n{self.listname_title} Menu Options:\n", f"  1:  Show {self.listname} list", f"  2:  Insert {self.listname[:-1]}",
                              f"  3:  Update existing {self.listname[:-1]} status", f"  4:  Update existing {self.listname[:-1]}",
                              f"  5:  Remove {self.listname[:-1]}", f"  0:  Return to main menu"]
-        for dicts in self.dictslist:
-            dicts['courier'] = int(dicts['courier'])
-            dicts['items'] = [int(i) for i in dicts['items'].strip("][").split(",")]
+        for dicts in self.dictslist: dicts['courier'], dicts['items'] = int(dicts['courier']), [int(i) for i in dicts['items'].strip("][").split(",")]
         
     def show_other_list(self, other_list, list_name: str):
         """New show other lists for showing any lists with args"""
         print(f"{list_name.title()} list contains:\n")
-        for i, item in enumerate(other_list):
-            print(f"{list_name.title()[:-1]} Index {i}: {item}")
+        for i, item in enumerate(other_list): print(f"{list_name.title()[:-1]} Index {i}: {item}")
 
     def show_couriers(self):
         """Shows couriers list, returns prompted integer index of assigned courier"""
@@ -113,8 +105,9 @@ class Orders(BaseFunctions): ##Orders class
     def items_ordered(self):
         """Shows products list, returns prompted list of ordered products indexes"""
         self.show_other_list(self.products, self.products_list_name)
-        itemsIntList = [int(i) for i in input("Enter comma-separated product index values: ").split(',')]
-        return itemsIntList
+        try: itemsIntList = [int(i) for i in input("Enter comma-separated product index values: ").split(',')]
+        except ValueError: itemsIntList = None
+        finally: return itemsIntList
     
     def new_dict(self):
         """Overrided new_dict() in BaseFunctions. Returns dictionary with orders dictionary template"""
@@ -124,8 +117,7 @@ class Orders(BaseFunctions): ##Orders class
             "customer_phone": input("Enter customer phone number: "),
             "courier": self.show_couriers(),
             "status": "PREPARING",
-            "items": self.items_ordered()
-        }
+            "items": self.items_ordered()}
         return newDict
     
     def update_order_status(self):
@@ -133,12 +125,8 @@ class Orders(BaseFunctions): ##Orders class
         self.show_dicts()
         indexupd = int(input(f"\nEnter the order index of the status you want to change: "))
         indextempstatus = self.dictslist[indexupd]['status'] # store value at selected index for later printing
-        #Print statuslist options, update with prompted index value
         statuslist = ["PREPARING", "READY FOR DELIVERY", "OUT FOR DELIVERY", "DELIVERED"]
-        for i, status in enumerate(statuslist): print(f"  {i}: {status}")
+        for i, status in enumerate(statuslist): print(f"  {i}: {status}") #Print statuslist options, update with prompted index value
         self.dictslist[indexupd]['status'] = statuslist[int(input("Enter order status index to update: "))]
-        # cleanup output and confirm operation completed
-        print(f"Updated order index {indexupd} status:\n",
-              f"        from \"{indextempstatus}\"\n",
-              f"          to \"{self.dictslist[indexupd]['status']}\"!")
-# 144 lines with comments and docstrings. 14 docstrings lines, 4 comment lines. total: 126 lines
+        print(f"Updated order index {indexupd} status:\n", f"        from \"{indextempstatus}\"\n",
+              f"          to \"{self.dictslist[indexupd]['status']}\"!") #confirm operation completed
