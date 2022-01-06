@@ -1,6 +1,6 @@
 # Welcome to Solomon's miniproject app repo
 
-<img src = "https://img.shields.io/badge/last%20commit-06%2F01%2F2022%2010%3A06-red"> <img src = "https://img.shields.io/badge/please%20add-CI%2FCD%20shields%3F-red"> <img src = "https://img.shields.io/badge/Python%20Version-3.9.7-blue">
+<img src = "https://img.shields.io/badge/last%20commit-06%2F01%2F2022%2010%3A23-red"> <img src = "https://img.shields.io/badge/please%20add-CI%2FCD%20shields%3F-red"> <img src = "https://img.shields.io/badge/Python%20Version-3.9.7-blue">
 
 <img src="/pikachuwow.gif?raw=true">
 
@@ -20,7 +20,7 @@
   * Week 5 SQL goals
   * BONUS List orders by status or courier? (week5)
   * Write unittests for week4 then week5
-  * Merge OOP week4 branch to main
+  * Merge OOP week4 branch to main /
   * Dockerise Week4 app (update MP-python-docker with week4-finalapp) /
   * Finish refactoring menus, add docstrings and remove blank lines where appropriate /
   * Refactor menus and list printouts /
