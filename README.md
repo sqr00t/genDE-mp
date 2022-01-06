@@ -1,6 +1,6 @@
 # Welcome to Solomon's miniproject app repo
 
-<img src = "https://img.shields.io/badge/last%20commit-05%2F01%2F2022%2003%3A28-red"> <img src = "https://img.shields.io/badge/please%20add-CI%2FCD%20shields%3F-red"> <img src = "https://img.shields.io/badge/Python%20Version-3.9.7-blue">
+<img src = "https://img.shields.io/badge/last%20commit-06%2F01%2F2022%2001%3A57-red"> <img src = "https://img.shields.io/badge/please%20add-CI%2FCD%20shields%3F-red"> <img src = "https://img.shields.io/badge/Python%20Version-3.9.7-blue">
 
 <img src="/pikachuwow.gif?raw=true">
 
