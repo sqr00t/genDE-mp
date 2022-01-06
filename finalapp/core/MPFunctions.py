@@ -1,4 +1,4 @@
-import os.path, sys, csv
+import os.path, csv
 # 132 lines with comments and docstrings. 14 docstrings lines, 1 comment line. total: 117 lines
 class BaseFunctions: # list BaseFunctions object class. Pass to args: "filenames.csv"
     def __init__(self, filename: str, dictslist=None):
