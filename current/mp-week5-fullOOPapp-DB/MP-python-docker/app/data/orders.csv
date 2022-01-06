@@ -1,0 +1,4 @@
+customer_name,customer_address,customer_phone,courier,status,items
+Peter,123 Fake Street,4643536765,1,DELIVERED,"[1, 2, 3]"
+Reggie,134 who'sville,45341234,2,PREPARING,"[3, 4, 5]"
+Jimmy,North Pole,12353565,3,PREPARING,"[6, 7, 8]"
