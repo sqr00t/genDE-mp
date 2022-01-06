@@ -3,7 +3,7 @@ import os.path, sys, csv
 class BaseFunctions: # list BaseFunctions object class. Pass to args: "filenames.csv"
     def __init__(self, filename: str, dictslist=None):
         """Inits obj with BaseFunctions class."""
-        self.filepath = os.path.join(sys.path.append('../data/'), str(filename)) #check filepath if FileNotFoundError
+        self.filepath = os.path.join(os.path.dirname(__file__), '..', 'data/', str(filename))
         self.filename = str(filename)
         self.listname = self.filename[:-4]
         self.listname_title = self.listname.title()
