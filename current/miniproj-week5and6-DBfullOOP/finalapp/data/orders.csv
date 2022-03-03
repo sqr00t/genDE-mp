@@ -1,0 +1,5 @@
+id,customer_name,customer_address,customer_phone,courier,status,items
+1,Peter,123 Fake Street,4643536765,1,4,"[1, 2, 3]"
+2,Solomon,134 who'sville,45341234,2,2,"[1, 2, 4]"
+5,Solomon,M4,07400111111,5,1,"[3, 4, 3]"
+6,test,test,test,5,1,"[1, 3, 4]"
